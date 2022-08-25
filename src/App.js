@@ -5,28 +5,29 @@ import React, { useEffect, useState } from "react";
 function App() {
   const [quote, setQuote] = useState("");
   const [author, setAuthor] = useState("");
-
+  const [loading, setLoading] = useState("Get New Quote")
   useEffect(() => {
     let data = async () => {
+      setLoading("Loading...")
       // let res = await axios.get("https://api.quotable.io/random");
       let res = await axios.get(
-        "https://quote-garden.herokuapp.com/api/v3/quotes"
+        "https://quote-garden.herokuapp.com/api/v3/quotes/random"
       );
-      let p = Math.floor(Math.random() * 10 + 1);
-      // console.log(res.data);
       setQuote(res.data.data[0].quoteText);
       setAuthor(res.data.data[0].quoteAuthor);
+      setLoading("Get New Quote")
     };
     data();
   }, []);
 
   let fetchQuote = async () => {
+    setLoading("Loading...")
     let res = await axios.get(
-      "https://quote-garden.herokuapp.com/api/v3/quotes"
+      "https://quote-garden.herokuapp.com/api/v3/quotes/random"
     );
-    let p = Math.floor(Math.random() * 15 + 1);
-    setQuote(res.data.data[p].quoteText);
-    setAuthor(res.data.data[p].quoteAuthor);
+    setQuote(res.data.data[0].quoteText);
+    setAuthor(res.data.data[0].quoteAuthor);
+    setLoading("Get New Quote")
   };
 
   return (
@@ -36,7 +37,7 @@ function App() {
         <div className="quote-container bg-black text-white p-4 m-4 w-fit rounded-lg mt-12 lg:ml-auto lg:mr-auto">
           <div className="border-4 p-4 lg:w-96  rounded-md">
             <h1 className="font-bold">Quote : </h1>
-            <h2 className="quote  ">"{quote}"</h2>
+            <h2 className="quote ">"{quote}"</h2>
           </div>
           <div className="mt-4">
             <h1 className="font-bold">Author :</h1>
@@ -44,13 +45,11 @@ function App() {
           </div>
           <div className="btn-contain relative bg-white text-black w-fit p-3 ml-0 m-2 hover:bg-blue-300 font-bold rounded-lg  mt-12 lg:ml-auto lg:mr-auto">
             <button onClick={fetchQuote} className="btn">
-              Get New Quote
+              {loading}
             </button>
           </div>
         </div>
-        <h2 className="footer">
-          love ❤️ from jayesh
-        </h2>
+        <h2 className="footer">love ❤️ from jayesh</h2>
       </div>
     </div>
   );
